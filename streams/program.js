@@ -74,3 +74,21 @@
 //     .pipe(tr)
 //     .pipe(process.stdout)
 // ;
+
+// // l6
+var concat = require('concat-stream');
+
+function processString (data) {
+  result = data.toString().split('').reverse().join('');
+  process.stdout.write(result);
+}
+
+process.stdin.pipe(concat(processString))
+//
+// or
+//
+// var concat = require('concat-stream');
+//
+// process.stdin.pipe(concat(function (buf) {
+//   process.stdout.write(buf.toString().split('').reverse().join(''));
+// }))
