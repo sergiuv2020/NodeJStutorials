@@ -44,6 +44,35 @@
 //   process.stdin.pipe(r).pipe(process.stdout);
 
 // // l10
-var ws = require('websocket-stream');
-var stream = ws('ws://localhost:8099');
-stream.write('hello\n')
+// var ws = require('websocket-stream');
+// var stream = ws('ws://localhost:8099');
+// stream.write('hello\n')
+
+// // l11
+var trumpet = require('trumpet');
+var tr = trumpet();
+var through = require('through2');
+
+tr.select('.loud', function (htmlPart) {
+    var stream = htmlPart.createStream();
+    stream.pipe(through(function (buf, _, next) {
+      this.push(buf.toString().toUpperCase());
+      next();
+    })).pipe(stream);
+});
+
+process.stdin.pipe(tr).pipe(process.stdout);
+
+// // Here's the reference solution:
+//
+//   var trumpet = require('trumpet');
+//   var through = require('through2');
+//   var tr = trumpet();
+//
+//   var loud = tr.select('.loud').createStream('.loud');
+//   loud.pipe(through(function (buf, _, next) {
+//       this.push(buf.toString().toUpperCase());
+//       next();
+//   })).pipe(loud);
+//
+//   process.stdin.pipe(tr).pipe(process.stdout);
